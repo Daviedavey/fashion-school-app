@@ -18,8 +18,8 @@ The application follows a classic client-server model with stateless JWT-based a
 
  ✨ Key Features
 
--   ✅ Role-Based Authentication**: Secure user registration and login flow with distinct "Teacher" and "Student" roles, managed by JWTs.
--   ✅ Dynamic Blog System**: Teachers can create and delete posts with text and images. All users can view the feed, which features "Read More" text expansion and a full-screen image viewer.
+-   ✅ Role-Based Authentication: Secure user registration and login flow with distinct "Teacher" and "Student" roles, managed by JWTs.
+-   ✅ Dynamic Blog System: Teachers can create and delete posts with text and images. All users can view the feed, which features "Read More" text expansion and a full-screen image viewer.
 -   ✅ Level-Based Assignment Module**: Teachers can create visual assignments with multiple images and assign a difficulty level (Beginner, Advanced, Expert).
 -   ✅ Personalized Student Experience**: The app intelligently filters content, ensuring students only see assignments that match their specific group's designated skill levels.
 -   ✅ Customizable Dashboard**: Teachers can update a "Fashion Icon of the Week" feature, providing dynamic and engaging content for the student home screen.
