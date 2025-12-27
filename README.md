@@ -2,7 +2,7 @@
 
 A full-stack, cross-platform mobile application for iOS & Android designed to enhance the learning experience for students and teachers at a creative school. This repository contains both the React Native frontend and the Spring Boot backend.
 
-## 🚀 Live Demo
+ 🚀 Live Demo
 
 DEMO_GIF will be availabe shortly
 
@@ -11,8 +11,8 @@ DEMO_GIF will be availabe shortly
 
 This project is a full-stack application built with a modern, industry-standard stack, structured as a mono-repo.
 
--   **`/TfsFrontEnd`**: A **React Native** mobile application for iOS and Android that serves as the client. It is responsible for the user interface and all user interactions.
--   **`/backEnd`**: A **Spring Boot (Java)** REST API that serves as the backend. It handles business logic, security, and communication with the database.
+-   `/TfsFrontEnd`: A React Native mobile application for iOS and Android that serves as the client. It is responsible for the user interface and all user interactions.
+-   `/backEnd`: A Spring Boot (Java) REST API that serves as the backend. It handles business logic, security, and communication with the database.
 
 The application follows a classic client-server model with stateless JWT-based authentication.
 
@@ -37,9 +37,9 @@ The application follows a classic client-server model with stateless JWT-based a
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
--   Security:** Spring Security & JWT
--   Data Access:** Spring Data JPA / Hibernate
--   Build Tool:** Apache Maven
+-   Security: Spring Security & JWT
+-   Data Access: Spring Data JPA / Hibernate
+-   Build Tool: Apache Maven
 
 ⚙️ Setup & Installation
 
@@ -53,8 +53,8 @@ To run this project locally, you will need to run both the backend server and th
 
  1. Backend Setup (`/TfsBackEnd`)
 
-Configure Database:** Create a new PostgreSQL database. In `TfsBackEnd/src/main/resources/application.properties`, update the `spring.datasource.url`, `username`, and `password` with your local database credentials.
-Run the Server:** Navigate to the backend directory and run the application using Maven.
+Configure Database: Create a new PostgreSQL database. In `TfsBackEnd/src/main/resources/application.properties`, update the `spring.datasource.url`, `username`, and `password` with your local database credentials.
+Run the Server: Navigate to the backend directory and run the application using Maven.
     ```bash
     cd TfsBackEnd
     mvn spring-boot:run
@@ -63,7 +63,7 @@ Run the Server:** Navigate to the backend directory and run the application usin
 
  2. Frontend Setup (`/TfsFrontEnd`)
 
- Install Dependencies: Open a **new terminal window** and navigate to the frontend directory.
+ Install Dependencies: Open a new terminal window** and navigate to the frontend directory.
     ```bash
     cd TfsFrontEnd
     npm install
