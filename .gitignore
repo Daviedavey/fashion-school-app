@@ -1,0 +1,81 @@
+
+# file too large
+TfsFrontEnd/ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-maccatalyst/hermes.framework/Versions/0/hermes
+TfsFrontEnd/ios/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64/hermes.framework/hermes
+backend/target
+
+# Presentation files
+*.key
+*.ppt
+*.pptx
+
+# --- Global ignores ---
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+
+# --- Node / React Native ---
+frontend/node_modules/
+frontend/.expo/
+frontend/.expo-shared/
+frontend/.vscode/
+frontend/coverage/
+frontend/dist/
+frontend/build/
+
+# React Native iOS
+frontend/ios/Pods
+frontend/ios/build/
+frontend/ios/*.xcworkspace
+frontend/ios/*.xcodeproj
+frontend/ios/DerivedData/
+frontend/ios/.bundle/
+
+# React Native Android
+frontend/android/.gradle/
+frontend/android/app/build/
+frontend/android/build/
+
+# React Native Hermes (large binary files)
+frontend/ios/**/hermes.xcframework/
+frontend/ios/**/hermes.framework/
+
+# --- Java / Spring Boot ---
+backend/target/
+backend/*.iml
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.vscode/
+
+# Maven wrapper
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# --- IDE settings ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# --- OS generated files ---
+*.swp
+*.swo
+ehthumbs.db
+Icon?
+
+# --- contains Passwords ---
+backend/src/main/resources/application.properties
+
+# Ignore build files
+backend/target/
+
+# Ignore iOS Pods (they can be regenerated)
+TfsFrontEnd/ios/Pods/
+
+

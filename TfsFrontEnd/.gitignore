@@ -1,0 +1,41 @@
+
+# Presentation files
+*.key
+*.ppt
+*.pptx
+*.pdf
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build files
+build/
+dist/
+*.js.map
+
+# Temporary files
+*.log
+*.lock
+*.tmp
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# React Native
+/ios/Pods/
+/ios/build/
+/android/app/build/
+/android/.gradle/
+/android/build/
+/android/app/src/main/assets/index.android.bundle*
+
+# macOS
+.DS_Store
