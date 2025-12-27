@@ -63,23 +63,23 @@ Run the Server:** Navigate to the backend directory and run the application usin
 
  2. Frontend Setup (`/TfsFrontEnd`)
 
- Install Dependencies:** Open a **new terminal window** and navigate to the frontend directory.
+ Install Dependencies: Open a **new terminal window** and navigate to the frontend directory.
     ```bash
     cd TfsFrontEnd
     npm install
     ```
-Configure API Endpoint:** In `TfsFrontEnd/src/api/config.js`, ensure `API_BASE_URL` is pointing to your running backend.
+Configure API Endpoint: In `TfsFrontEnd/src/api/config.js`, ensure `API_BASE_URL` is pointing to your running backend.
     ```javascript
     // For the iOS Simulator
     export const API_BASE_URL = 'http://localhost:8080';
     ```
 Run the Application:**
-    -   For iOS:**
+    -   For iOS:
         ```bash
         cd ios && pod install && cd ..
         npx react-native run-ios
         ```
-    -   For Android:**
+    -   For Android:
         ```bash
         npx react-native run-android
         ```
