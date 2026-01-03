@@ -1,4 +1,31 @@
-rootProject.name = 'TfsApp'
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin')
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    google()
+    mavenCentral()
+  }
+
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            version('bcprov', '1.78.1')
+            library('bcprov', 'org.bouncycastle', 'bcprov-jdk18on').versionRef('bcprov')
+        }
+    }
+}
+
+gradle.beforeProject { project ->
+    project.configurations.configureEach {
+        resolutionStrategy {
+            force "org.bouncycastle:bcprov-jdk18on:1.78.1"
+        }
+    }
+}
+
+rootProject.name = "TfsApp"
+include(":app")
+includeBuild("${rootDir}/../node_modules/react-native-gradle-plugin")
+apply from: file("../node_modules/react-native/node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+applyNativeModulesSettingsGradle(settings)

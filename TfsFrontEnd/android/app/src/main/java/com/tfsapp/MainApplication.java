@@ -1,13 +1,19 @@
 package com.tfsapp;
 
-import android.app.Application;
 import com.facebook.react.PackageList;
+import android.app.Application;
+import android.content.Context;
+import com.facebook.react.PackageList;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -19,6 +25,7 @@ public class MainApplication extends Application implements ReactApplication {
           return BuildConfig.DEBUG;
         }
 
+        
         @Override
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
@@ -27,7 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           return packages;
         }
-
+        
+       
         @Override
         protected String getJSMainModuleName() {
           return "index";
@@ -52,11 +60,25 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
+    SoLoader.init(this, false);
+
+    // 🚀 Initialize Fresco to prevent ImagePipeline crashes
+    Fresco.initialize(this);
+
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }
-    ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+    // 🛠 Safe Flipper init (won't crash if unavailable or removed)
+    if (BuildConfig.DEBUG) {
+      try {
+        Class<?> flipperClass = Class.forName("com.tfsapp.ReactNativeFlipper");
+        flipperClass
+            .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
+            .invoke(null, this, getReactNativeHost().getReactInstanceManager());
+      } catch (Exception e) {
+        // Flipper not found or failed to load — ignore safely
+      }
+    }
   }
 }
