@@ -1,187 +1,179 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from 'react';
-import {StyleSheet, View, KeyboardAvoidingView, Platform} from 'react-native';
-import {Button, TextInput, Text, HelperText} from 'react-native-paper';
+import React, { useState } from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, Platform, Image, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Text } from 'react-native';
+import { Button, TextInput, HelperText } from 'react-native-paper';
 import axios from 'axios';
 import { login } from '../api/auth';
 import { jwtDecode } from 'jwt-decode';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { theme } from '../theme/theme';
 
+const LoginScreen = ({ navigation, onLoginSuccess }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-let test;
-const LoginScreen = ({navigation, onLoginSuccess}) => {
-const [username, setUsername] = useState('');
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [loading, setLoading] = useState(false);
-const [error, setError] = useState('');
+  const handleLogin = async () => {
+    if (!username || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const response = await login(username, password);
+      if (!response?.data?.token) {
+        throw new Error('Invalid response from server');
+      }
+      const userData = response.data;
+      const isTeacherFlag = userData.role === 'TEACHER';
+      axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+      await onLoginSuccess(userData.token, isTeacherFlag);
+      console.log('Login successful', userData);
+      await AsyncStorage.setItem('userToken', userData.token);
+      await AsyncStorage.setItem('userRole', userData.role);
+      await AsyncStorage.setItem('username', userData.username);
+      await AsyncStorage.setItem('name', userData.name);
+      const decoded = jwtDecode(userData.token);
+      console.log('Token expires at:', new Date(decoded.exp * 1000));
+    } catch (err) {
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Invalid username or password.';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const handleLogin = async () => {
-        if (!username || !password) {
-            setError('Please fill in all fields');
-            return;
-        }
+   return (
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardAvoidingView}
+      >
+        {/* Main content area that expands to fill space */}
+        <View style={styles.mainContent}>
+          <Image
+            source={require('../assets/images/logo.jpg')}
+            style={styles.logo}
+          />
+          <Image
+            source={require('../assets/images/login-illustration.jpg')}
+            style={styles.illustration}
+          />
+        </View>
 
-        setLoading(true);
-        setError('');
-        console.log(navigation.getState());
+        {/* Form area that is pushed down by the main content */}
+        <View style={styles.formContainer}>
+          <TextInput
+            label="Username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+            underlineColor="transparent"
+            activeUnderlineColor={theme.colors.primary}
+            theme={{ colors: { background: 'transparent' } }}
+            autoCapitalize="none"
+          />
+          <TextInput
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+            underlineColor="transparent"
+            activeUnderlineColor={theme.colors.primary}
+            theme={{ colors: { background: 'transparent' } }}
+          />
 
+          {error ? (
+            <HelperText type="error" visible={!!error} style={styles.errorText}>
+              {error}
+            </HelperText>
+          ) : null}
 
-        try {
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color={theme.colors.primary} />
+            ) : (
+              <Image source={require('../assets/images/arrow.jpg')} style={styles.loginButtonImage} />
+            )}
+          </TouchableOpacity>
+        </View>
 
-            const response = await login(username, password); // API call
-            console.log('Login response:', response); 
-
-            if (!response || !response.data || !response.data.token) {
-            throw new Error('Invalid response from server');
-             }
-
-             const token = response.data.token;
-             const userData = response.data;// The whole user data object from the response
-
-             const isTeacherFlag = userData.role === 'TEACHER'; // role dertermination 
-             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-             await onLoginSuccess(token, isTeacherFlag); // ✅ Notify App.js
-             console.log('Login successful', userData);
-             await AsyncStorage.setItem('userToken', userData.token);
-             await AsyncStorage.setItem('userRole', userData.role); // Also store role separately
-             await AsyncStorage.setItem('username', userData.username); // We store the username to check for post ownership.
-             await AsyncStorage.setItem('name', userData.name);// Storing the name can be useful for display purposes later.  
-             const decoded = jwtDecode(token);
-             console.log('Token expires at:', new Date(decoded.exp * 1000));
-             console.log('Current time:', new Date());
-             // Debug storage contents
-             console.log(await AsyncStorage.getAllKeys());
-        } catch (err) {
-  // =======================================================
-  // ### THIS IS OUR DETAILED DEBUGGING LOG ###
-  // =======================================================
-  console.log("--- LOGIN ERROR CATCH BLOCK ---");
-  
-  if (err.response) {
-    // This block runs for server responses (4xx, 5xx errors)
-    console.log("STATUS CODE:", err.response.status);
-    console.log("RESPONSE DATA:", JSON.stringify(err.response.data, null, 2));
-    console.log("RESPONSE HEADERS:", JSON.stringify(err.response.headers, null, 2));
-
-    // Your logic to set the error message
-    const errorMessage = err.response.data?.error || err.response.data?.message || 'Invalid username or password.';
-    setError(errorMessage);
-
-  } else if (err.request) {
-    // This block runs for network errors (no response)
-    console.log("NETWORK ERROR - NO RESPONSE RECEIVED. Request object:", err.request);
-    setError('Cannot connect to the server. Please check your network.');
-  } else {
-    // This block runs for other errors (e.g., setting up the request)
-    console.log("CLIENT-SIDE ERROR:", err.message);
-    setError('An unexpected error occurred. Please try again.');
-  }
-  console.log("-------------------------------");
-  // =======================================================
-
-} finally {
-  setLoading(false);
-}
-    };
-
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
-        >
-            <View style={styles.innerContainer}>
-                <Text style={styles.title}>The Fashion School</Text>
-
-                <TextInput
-                    label="Username"
-                    value={username}
-                    onChangeText={setUsername}
-                    mode="outlined"
-                    style={styles.input}
-                    autoCapitalize="none"
-                />
-
-                <TextInput
-                    label="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    mode="outlined"
-                    secureTextEntry
-                    style={styles.input}
-                />
-
-                {error ? (
-                    <HelperText type="error" visible={!!error}>
-                        {error}
-                    </HelperText>
-                ) : null}
-
-                <Button
-                    mode="contained"
-                    onPress={handleLogin}
-                    loading={loading}
-                    disabled={loading}
-                    style={styles.button}
-                >
-                    Login
-                </Button>
-
-                <Button
-                    mode="text"
-                    onPress={() => navigation.navigate('Register')}
-                    style={styles.secondaryButton}
-                >
-                    Don't have an account? Register
-                </Button>
-                
-                <Button
-                    mode="text"
-                    onPress={() => navigation.navigate('ForgotPassword')}
-                    style={styles.secondaryButton}
-                >
-                    Forgot your Password? Reset Password
-                </Button>
-
-                <Button
-    mode="outlined"
-    onPress={async () => {
-        await AsyncStorage.clear();
-        Alert.alert("Success", "AsyncStorage has been cleared.");
-    }}
-    style={{ marginTop: 20, borderColor: 'red' }}
-    textColor="red"
->
-    (DEBUG) Clear All Storage
-</Button>
-            </View>
-        </KeyboardAvoidingView>
-    );
+        {/* Footer area at the very bottom */}
+        <View style={styles.footer}>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.footerText}>Don't have an account? Register</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.footerText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    innerContainer: {
-        padding: 20,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 30,
-    },
-    input: {
-        marginBottom: 15,
-    },
-    button: {
-        marginTop: 10,
-        paddingVertical: 5,
-    },
-    secondaryButton: {
-        marginTop: 15,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    justifyContent: 'space-between', // Distributes children vertically
+  },
+  mainContent: {
+    alignItems: 'center',
+    paddingTop: 50, // Space from the top
+  },
+  logo: {
+    width: 250,
+    height: 80,
+    resizeMode: 'contain',
+  },
+  illustration: {
+    width: '100%',
+    height: 480, // fixed height for the main image
+    resizeMode: 'contain',
+  },
+  formContainer: {
+    width: '85%',
+    alignSelf: 'center',
+  },
+  input: {
+    backgroundColor: 'transparent',
+  },
+  errorText: {
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  loginButton: {
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    padding: 10,
+  },
+    loginButtonImage: {
+     width: 180,  
+     height: 35, 
+     resizeMode: 'contain', // Ensures the image scales nicely
+     position: 'absolute',
+     right: 90
+  },
+  footer: {
+    paddingBottom: 40,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: theme.colors.primary,
+    fontSize: 14,
+    marginVertical: 5,
+  },
 });
 
 export default LoginScreen;

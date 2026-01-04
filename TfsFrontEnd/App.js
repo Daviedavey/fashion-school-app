@@ -22,6 +22,7 @@ import { isTeacher } from './src/api/auth';
 import { verifyToken } from './src/api/auth';
 import Icon from 'react-native-vector-icons/Ionicons'; 
 import { logout } from './src/api/auth';
+import { theme } from './src/theme/theme';
 
 const RootStack = createStackNavigator(); 
 
@@ -80,7 +81,7 @@ export default function App() {
   }
 
   return (
-    <PaperProvider settings={{ icon: ionicons }}>
+    <PaperProvider theme={theme} settings={{ icon: ionicons }}>
     <NavigationContainer>
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
           {isTeacherUser === null ? (
