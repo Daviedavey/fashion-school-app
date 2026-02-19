@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Text, ScrollView, ActivityIndicator, Alert, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { getCurrentFashionIcon } from '../api/dashboard'; // Import our new function
+import { getCurrentFashionIcon } from '../api/dashboard';
+import Icon from 'react-native-vector-icons/Ionicons'; // Using Ionicons for the Instagram icon
 
-// The main component
 const DashBoardScreen = ({ navigation }) => {
   const [iconData, setIconData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,11 +15,10 @@ const DashBoardScreen = ({ navigation }) => {
           const data = await getCurrentFashionIcon();
           setIconData(data);
         } catch (error) {
-          // It's okay if not found (404), just means teacher hasn't set one yet
           if (error.response?.status !== 404) {
              Alert.alert('Error', 'Could not load dashboard content.');
           }
-          setIconData(null); // Ensure it's null on error
+          setIconData(null);
         } finally {
           setLoading(false);
         }
@@ -28,39 +27,52 @@ const DashBoardScreen = ({ navigation }) => {
     }, [])
   );
 
+  const openInstagram = () => {
+    // Replace with the actual Instagram profile URL
+    const instagramURL = 'https://www.instagram.com/thefashionschool'; 
+    Linking.openURL(instagramURL).catch(err => console.error("Couldn't load page", err));
+  };
+
   return (
     <View style={styles.screenContainer}>
+      {/* Main Content Area */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* === FASHION ICON SECTION === */}
-        <View style={styles.content}>
-          {loading ? (
-            <ActivityIndicator size="large" style={styles.loader}/>
-          ) : iconData ? (
-            <View style={styles.iconFeature}>
-              <View style={styles.headerTextContainer}>
+        {loading ? (
+          <ActivityIndicator size="large" style={styles.loader} />
+        ) : iconData ? (
+          <View style={styles.featureContainer}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View>
                 <Text style={styles.headerTextSmall}>this weeks</Text>
                 <Text style={styles.headerTextLarge}>FASHION ICON</Text>
               </View>
+              <TouchableOpacity onPress={openInstagram}>
+                <Icon name="logo-instagram" size={30} color="#000" />
+              </TouchableOpacity>
+            </View>
 
-              <View style={styles.mainContentRow}>
-                  <View style={styles.imageAndTextColumn}>
-                      <Image source={{ uri: iconData.imageUrl }} style={styles.mainImage} />
-                      <Text style={styles.descriptionText}>{iconData.description}</Text>
-                  </View>
-                  <View style={styles.verticalTextContainer}>
-                      <Text style={styles.verticalText}>{iconData.name.toUpperCase()}</Text>
-                  </View>
+            {/* Main Content Row */}
+            <View style={styles.mainContentRow}>
+              <View style={styles.imageAndTextColumn}>
+                <Image source={{ uri: iconData.imageUrl }} style={styles.mainImage} />
+                <Text style={styles.descriptionText}>{iconData.description}</Text>
+              </View>
+              <View style={styles.verticalTextContainer}>
+                <Text style={styles.verticalText}>{iconData.name.toUpperCase()}</Text>
               </View>
             </View>
-          ) : (
-            <Text style={styles.noContentText}>Welcome! Content will appear here soon.</Text>
-          )}
-        </View>
+          </View>
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Welcome! The Fashion Icon of the Week will appear here soon.</Text>
+          </View>
+        )}
       </ScrollView>
 
-      {/* === FIXED BOTTOM NAVIGATION === */}
+      {/* Fixed Bottom Navigation Bar */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.IconButton} onPress={() => navigation.navigate('Assignments')}>
+       <TouchableOpacity style={styles.IconButton} onPress={() => navigation.navigate('Assignments')}>
           <Image source={require('../assets/images/assignments.png')} style={styles.iconImage} /> 
         </TouchableOpacity>
         <TouchableOpacity style={styles.IconButton} onPress={() => navigation.navigate('Blog')}>
@@ -80,66 +92,72 @@ const DashBoardScreen = ({ navigation }) => {
   );
 };
 
-// Stylesheet
 const styles = StyleSheet.create({
   screenContainer: { flex: 1, backgroundColor: '#ffffff' },
   scrollContainer: { flexGrow: 1 },
-  content: {
+  loader: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
+  emptyText: { fontSize: 18, color: '#888', textAlign: 'center' },
+  
+  featureContainer: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center'
   },
-  loader: { marginTop: 50 },
-  noContentText: { fontSize: 16, color: '#888', textAlign: 'center' },
-  iconFeature: { width: '100%' },
-  headerTextContainer: { alignItems: 'center', marginBottom: 20 },
-  headerTextSmall: { fontSize: 22, fontStyle: 'italic', letterSpacing: 1 },
-  headerTextLarge: { fontSize: 36, fontWeight: 'bold', letterSpacing: 2 },
-  mainContentRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-  },
-  imageAndTextColumn: {
-      flex: 1, // Takes up most of the space
-  },
-  mainImage: {
-      width: '100%',
-      height: 300,
-      resizeMode: 'cover',
-      borderRadius: 8,
-  },
-  descriptionText: {
-      marginTop: 15,
-      fontSize: 16,
-      lineHeight: 24,
-      color: '#333',
-  },
-  verticalTextContainer: {
-      width: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-  },
-  verticalText: {
-      fontWeight: 'bold',
-      fontSize: 20,
-      color: '#000',
-      transform: [{ rotate: '-90deg' }],
-      letterSpacing: 4,
-      // Adjust width to prevent text from being cut off after rotation
-      width: 300, 
-      textAlign: 'center',
-  },
-  // --- Fixed Bottom Button Bar ---
-  buttonContainer: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 40,
-    padding: 40,
-    borderTopWidth: 0.1,
-    //borderTopColor: '#e0e0e0',
-    //backgroundColor: '#ffffff',
+    alignItems: 'flex-start',
+    marginBottom: 20,
   },
-  
+  headerTextSmall: {
+    fontSize: 22,
+    fontFamily: 'Times New Roman', // Placeholder, we'll add custom fonts later
+    fontStyle: 'italic',
+  },
+  headerTextLarge: {
+    fontSize: 36,
+    fontFamily: 'Helvetica-Bold', // Placeholder
+    fontWeight: 'bold',
+    letterSpacing: 1,
+  },
+  mainContentRow: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  imageAndTextColumn: {
+    flex: 1,
+    marginRight: 15,
+  },
+  mainImage: {
+    width: '100%',
+    aspectRatio: 3 / 4, // A portrait aspect ratio, adjust as needed
+    marginBottom: 20,
+  },
+  descriptionText: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  verticalTextContainer: {
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verticalText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    letterSpacing: 4,
+    transform: [{ rotate: '-90deg' }],
+    width: 300, // Give it enough width to not be cut off after rotation
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    backgroundColor: '#ffffff',
+  },
 });
 
 export default DashBoardScreen;

@@ -13,7 +13,7 @@ const UploadAssignmentsScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
-  // ### MODIFIED STATE: Changed from index to the actual string value ###
+  // Changed from index to the actual string value 
   const [level, setLevel] = useState('BEGINNER'); 
   const [loading, setLoading] = useState(false);
 

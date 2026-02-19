@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Text} from 'react-native';
 
 // Import the component you want to embed
 import UpdateBlogScreen from './UpdateBlogScreen';
@@ -38,6 +38,10 @@ const TeacherDashBoardScreen = ({ navigation, route }) => { // Pass route for co
           <Image source={require('../assets/images/portfolio.png')} style={styles.iconImage} />
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.IconButton} onPress={() => navigation.navigate('UpdateFashionIcon')}>
+                  <Image source={require('../assets/images/favourites.png')} style={styles.iconImage} /> 
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.IconButton} onPress={() => navigation.navigate('Agenda')}>
           <Image source={require('../assets/images/agenda.png')} style={styles.iconImage} />
         </TouchableOpacity>
@@ -49,14 +53,27 @@ const TeacherDashBoardScreen = ({ navigation, route }) => { // Pass route for co
 };
 
 const styles = StyleSheet.create({
+  
   // The main screen container
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff', // Or your desired background color
+   container: { flex: 1, backgroundColor: '#ffffff' },
+  mainContent: { flex: 1 },
+  updateButton: {
+    backgroundColor: '#6200ee', // Use your theme's primary color
+    padding: 15,
+    margin: 15,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  // The area that will contain the embedded screen
-  mainContent: {
-    flex: 1, // <-- This is the most important style!
+  updateButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  feedTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 15,
+    marginBottom: 10,
   },
   // The fixed footer
   buttonContainer: {

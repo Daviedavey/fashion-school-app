@@ -1,10 +1,10 @@
-// navigation/TeacherStack.js
 import { createStackNavigator } from '@react-navigation/stack';
 import TeacherDashBoardScreen from '../screens/TeacherDashBoardScreen';
 import UploadAssignmentsScreen from '../screens/UploadAssignmentsScreen';
 import BlogUploadScreen from '../screens/BlogUploadScreen';
 import ViewPortfolioScreen from '../screens/ViewPortfolioScreen';
 import UpdateBlogScreen from '../screens/UpdateBlogScreen';
+import UpdateFashionIconScreen from '../screens/UpdateFashionIconScreen';
 import { Button } from 'react-native-paper'; 
 
 
@@ -23,6 +23,7 @@ export default function TeacherStack({ onLogout }) {
       <Stack.Screen name="UploadBlog" component={BlogUploadScreen} />
       <Stack.Screen name="ViewPortfolio" component={ViewPortfolioScreen} />
       <Stack.Screen name="CreatedBlogs" component={UpdateBlogScreen} />
+      <Stack.Screen name="UpdateFashionIcon" component={UpdateFashionIconScreen} options={{title: 'Update Fashiomn Icon' }} />
     </Stack.Navigator>
   );
 }
