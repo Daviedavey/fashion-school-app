@@ -1,5 +1,4 @@
 package com.thefashionschool.theFashionSchool.controller;
-
 import com.thefashionschool.theFashionSchool.dto.AssignmentDTO;
 import com.thefashionschool.theFashionSchool.model.Assignment;
 import com.thefashionschool.theFashionSchool.model.Level;
