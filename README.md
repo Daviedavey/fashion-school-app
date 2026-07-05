@@ -63,7 +63,7 @@ Run the Server: Navigate to the backend directory and run the application using 
 
  2. Frontend Setup (`/TfsFrontEnd`)
 
- Install Dependencies: Open a new terminal window** and navigate to the frontend directory.
+ Install Dependencies: Open a new terminal window and navigate to the frontend directory.
     ```bash
     cd TfsFrontEnd
     npm install
