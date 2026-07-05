@@ -73,7 +73,7 @@ Configure API Endpoint: In `TfsFrontEnd/src/api/config.js`, ensure `API_BASE_URL
     // For the iOS Simulator
     export const API_BASE_URL = 'http://localhost:8080';
     ```
-Run the Application:**
+Run the Application:
     -   For iOS:
         ```bash
         cd ios && pod install && cd ..
