@@ -27,9 +27,6 @@ export const deletePost = async (postId) => {
   }
 };
 
-// You can add other blog-related API calls here in the future
-// export const getPosts = async () => { ... }
-
 export const createPost = async (text, image) => {
   // 'image' will be an object from react-native-image-picker
   // It contains info like uri, type, and fileName
@@ -50,7 +47,7 @@ export const createPost = async (text, image) => {
   try {
     const api = await getAuthenticatedApi();
     
-    // For multipart/form-data, we need to set the header explicitly
+    // For multipart/form-data, the header needs to be explicitly set
     const response = await api.post('/api/blog', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -66,8 +63,6 @@ export const createPost = async (text, image) => {
 
 export const getPosts = async () => {
   try {
-    // This endpoint is public, so we don't need an authenticated instance of axios.
-    // We can just call it directly.
     const response = await axios.get(`${API_BASE_URL}/api/blog`);
     return response.data;
   } catch (error) {

@@ -47,7 +47,6 @@ export const createAssignment = async (title, description,images, level) => {
 export const getAssignments = async () => {
   try {
     const api = await getAuthenticatedApi();
-    // This GET request is authenticated, as per our SecurityConfig
     const response = await api.get('/api/assignments');
     return response.data;
   } catch (error) {

@@ -42,7 +42,7 @@ const AssignmentsScreen = ({ navigation }) => {
     >
         {/* container for the image */}
       <View style={styles.imageContainer}>
-          {/* We'll display the FIRST image of the assignment as a preview */}
+          {/* Displays the FIRST image of the assignment as a preview */}
           {item.imageUrls && item.imageUrls.length > 0 ? (
               <Image source={{ uri: item.imageUrls[0] }} style={styles.cardImage} />
           ) : (
@@ -78,7 +78,7 @@ const AssignmentsScreen = ({ navigation }) => {
         onRefresh={fetchAssignments}
         refreshing={loading}
         numColumns={2}
-         // This key is for the FlatList itself to re-render correctly on column changes
+         //  Key for the FlatList itself to re-render correctly on column changes
         key={'_'} 
       />
     </View>

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 10,
-    backgroundColor: '#f0f0f0', // Placeholder color
+    backgroundColor: '#f0f0f0',
   },
   noImagesText: {
     paddingHorizontal: 20,

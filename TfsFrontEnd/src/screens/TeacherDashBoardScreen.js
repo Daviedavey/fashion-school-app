@@ -9,7 +9,7 @@ const TeacherDashBoardScreen = ({ navigation, route }) => { // Pass route for co
   return (
     // This is the main container for the whole screen.
     // `flex: 1` makes it take up all available screen space.
-    // The default `flexDirection` is 'column', which is what we want.
+    // The default `flexDirection` is 'column'.
     <View style={styles.container}>
       {/* 
         This is the scrollable content area.
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
    container: { flex: 1, backgroundColor: '#ffffff' },
   mainContent: { flex: 1 },
   updateButton: {
-    backgroundColor: '#6200ee', // Use your theme's primary color
+    backgroundColor: '#6200ee',
     padding: 15,
     margin: 15,
     borderRadius: 8,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderTopWidth: 1,
     borderTopColor: '#e0e0e0',
-    backgroundColor: '#ffffff', // Give it a background to ensure it's not transparent
+    backgroundColor: '#ffffff', // background to ensure it's not transparent
   },
   IconButton: {
     padding: 5,

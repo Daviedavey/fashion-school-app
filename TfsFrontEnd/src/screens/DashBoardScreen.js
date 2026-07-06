@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text, ScrollView, ActivityIndicator, Alert, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { getCurrentFashionIcon } from '../api/dashboard';
-import Icon from 'react-native-vector-icons/Ionicons'; // Using Ionicons for the Instagram icon
+import Icon from 'react-native-vector-icons/Ionicons'; // Ionicons for the Instagram icon
 
 const DashBoardScreen = ({ navigation }) => {
   const [iconData, setIconData] = useState(null);
@@ -28,8 +28,7 @@ const DashBoardScreen = ({ navigation }) => {
   );
 
   const openInstagram = () => {
-    // Replace with the actual Instagram profile URL
-    const instagramURL = 'https://www.instagram.com/thefashionschool'; 
+    const instagramURL = 'https://www.instagram.com/the_fashionschool?igsh=MWE5YjdzMnJjM2ZnZw=='; 
     Linking.openURL(instagramURL).catch(err => console.error("Couldn't load page", err));
   };
 
@@ -70,7 +69,7 @@ const DashBoardScreen = ({ navigation }) => {
         )}
       </ScrollView>
 
-      {/* Fixed Bottom Navigation Bar */}
+      {/* Bottom Navigation Bar */}
       <View style={styles.buttonContainer}>
        <TouchableOpacity style={styles.IconButton} onPress={() => navigation.navigate('Assignments')}>
           <Image source={require('../assets/images/assignments.png')} style={styles.iconImage} /> 
@@ -111,12 +110,12 @@ const styles = StyleSheet.create({
   },
   headerTextSmall: {
     fontSize: 22,
-    fontFamily: 'Times New Roman', // Placeholder, we'll add custom fonts later
+    fontFamily: 'Times New Roman', 
     fontStyle: 'italic',
   },
   headerTextLarge: {
     fontSize: 36,
-    fontFamily: 'Helvetica-Bold', // Placeholder
+    fontFamily: 'Helvetica-Bold', 
     fontWeight: 'bold',
     letterSpacing: 1,
   },
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     letterSpacing: 4,
     transform: [{ rotate: '-90deg' }],
-    width: 300, // Give it enough width to not be cut off after rotation
+    width: 300, 
     textAlign: 'center',
   },
   buttonContainer: {

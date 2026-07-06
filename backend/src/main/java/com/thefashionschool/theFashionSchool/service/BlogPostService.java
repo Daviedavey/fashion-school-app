@@ -64,14 +64,12 @@ public class BlogPostService {
     }
 
     public void deletePost(Long postId, String currentUsername) {
-        // 1. Find the blog post by its ID. If it doesn't exist, throw an exception.
-        //    Using orElseThrow is a clean way to handle the "not found" case.
+        // Post finden
         BlogPost post = blogPostRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Blog post with ID " + postId + " not found."));
 
         // 2. SECURITY CHECK: Verify that the user attempting the delete is the owner of the post.
         if (!post.getUsername().equals(currentUsername)) {
-            // If not, throw an AccessDeniedException. This will result in a 403 Forbidden status.
             throw new AccessDeniedException("You are not authorized to delete this post.");
         }
 
@@ -88,8 +86,6 @@ public class BlogPostService {
             Files.deleteIfExists(imagePath);
             logger.info("Successfully deleted associated image file: {}", filename);
         } catch (IOException e) {
-            // If the file can't be deleted, we log it as a warning but don't fail the whole operation,
-            // as the primary goal (deleting the post record) was successful.
             logger.warn("Could not delete image file: {}. Manual cleanup may be required. Error: {}", filename, e.getMessage());
         }
     }

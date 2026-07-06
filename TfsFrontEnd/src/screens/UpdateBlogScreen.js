@@ -9,15 +9,13 @@ import { useFocusEffect } from '@react-navigation/native'; // To refresh data
 import axios from 'axios';
 import { API_BASE_URL } from '../api/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// ### IMPORT OUR NEW API FUNCTION ###
 import { deletePost } from '../api/blog';
 
 
 const UpdateBlogScreen = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  // ### ADD STATE TO HOLD THE CURRENT USER'S USERNAME ###
+  // STATE TO HOLD THE CURRENT USER'S USERNAME
   const [currentUsername, setCurrentUsername] = useState(null);
 
   // Function to fetch posts from the server
@@ -42,16 +40,14 @@ const UpdateBlogScreen = () => {
   };
   
   // useFocusEffect will re-run fetchPosts every time the screen comes into view.
-  // This is great for ensuring the data is fresh if a user navigates away and back.
+  // ensures the data is fresh if a user navigates away and back.
   useFocusEffect(
     useCallback(() => {
       fetchPosts();
     }, [])
   );
 
-  // ### CREATE THE FUNCTION TO HANDLE THE DELETE ACTION ###
   const handleDelete = (postId) => {
-    // Show a confirmation dialog first! This is critical for destructive actions.
     Alert.alert(
       "Delete Post",
       "Are you sure you want to delete this post? This action cannot be undone.",
@@ -104,7 +100,7 @@ const UpdateBlogScreen = () => {
         {/* Container for text and delete button */}
         <View style={styles.footerContainer}>
             <Text style={styles.postText}>{item.text}</Text>
-            {/* ### CONDITIONALLY RENDER THE DELETE BUTTON ### */}
+            {/* CONDITIONALLY RENDER THE DELETE BUTTON */}
             {isAuthor && (
               <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteButton}>
                 <Icon name="trash-outline" size={24} color="#D93B3B" />
@@ -115,7 +111,6 @@ const UpdateBlogScreen = () => {
     );
   };
 
-  // The rest of your component (return statement) remains the same
   return (
     <View style={styles.container}>
       {loading ? (
@@ -126,7 +121,6 @@ const UpdateBlogScreen = () => {
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           contentContainerStyle={styles.list}
-          // Add a refresh control for pull-to-refresh functionality
           onRefresh={fetchPosts}
           refreshing={loading}
         />
@@ -136,7 +130,6 @@ const UpdateBlogScreen = () => {
 };
 
 
-// ### ADD NEW STYLES ###
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -171,12 +164,11 @@ const styles = StyleSheet.create({
   postText: {
     fontSize: 16,
     flex: 1, // Allows text to take up available space
-    marginRight: 10, // Add some space between text and button
+    marginRight: 10, 
   },
   deleteButton: {
     padding: 5, // Makes the touch area larger
   },
-  // ... your other styles if any
 });
 
 export default UpdateBlogScreen;

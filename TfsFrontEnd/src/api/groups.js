@@ -10,7 +10,6 @@ export const getGroups = async () => {
     return response.data;
   } catch (error) {
     
-    // DETAILED ERROR LOGGING ###
     console.log("--- FAILED TO FETCH GROUPS (API aLEVEL) ---");
     if (error.response) {
       console.log("Status Code:", error.response.status);

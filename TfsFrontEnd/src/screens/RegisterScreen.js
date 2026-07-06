@@ -16,7 +16,7 @@ const RegisterScreen = ({ navigation }) => {
     password: '',
     confirmPassword: '',
   });
-  const [groupId, setGroupId] = useState(null); // Separate state
+  const [groupId, setGroupId] = useState(null); 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [groups, setGroups] = useState([]);
@@ -104,59 +104,119 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.innerContainer}>
-        <Text style={styles.title}>Create Account</Text>
-        <TextInput label="Username" value={formData.username} onChangeText={(text) => handleChange('username', text)} mode="outlined" error={!!errors.username} autoCapitalize="none"/>
-        <HelperText type="error" visible={!!errors.username}>{errors.username}</HelperText>
-        <TextInput label="Name" value={formData.name} onChangeText={(text) => handleChange('name', text)} mode="outlined" error={!!errors.name}/>
-        <HelperText type="error" visible={!!errors.name}>{errors.name}</HelperText>
-        <TextInput label="Surname" value={formData.surname} onChangeText={(text) => handleChange('surname', text)} mode="outlined" error={!!errors.surname}/>
-        <HelperText type="error" visible={!!errors.surname}>{errors.surname}</HelperText>
-        <TextInput label="Email" value={formData.email} onChangeText={(text) => handleChange('email', text)} mode="outlined" keyboardType="email-address" autoCapitalize="none" error={!!errors.email}/>
-        <HelperText type="error" visible={!!errors.email}>{errors.email}</HelperText>
-        <TextInput label="Password" value={formData.password} onChangeText={(text) => handleChange('password', text)} mode="outlined" secureTextEntry error={!!errors.password}/>
-        <HelperText type="error" visible={!!errors.password}>{errors.password}</HelperText>
-        <TextInput label="Confirm Password" value={formData.confirmPassword} onChangeText={(text) => handleChange('confirmPassword', text)} mode="outlined" secureTextEntry error={!!errors.confirmPassword}/>
-        <HelperText type="error" visible={!!errors.confirmPassword}>{errors.confirmPassword}</HelperText>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <Text style={styles.title}>Create Account</Text>
+          
+          <TextInput label="Username" value={formData.username} onChangeText={(text) => handleChange('username', text)} mode="outlined" error={!!errors.username} autoCapitalize="none"/>
+          <HelperText type="error" visible={!!errors.username}>{errors.username}</HelperText>
 
-        {groupsLoading ? (
-          <ActivityIndicator animating={true} style={{ marginVertical: 20 }} />
-        ) : groups.length > 0 ? (
-          <>
-               <Dropdown
-                label={"Select your Group"}
-                mode={"outlined"}
-                visible={showDropDown}
-                showDropDown={() => setShowDropDown(true)}
-                onDismiss={() => setShowDropDown(false)}
-                value={groupId}
-                setValue={setGroupId}
-                list={groups} 
-                inputProps={{ error: !!errors.groupId }}
-            />
-            <HelperText type="error" visible={!!errors.groupId}>{errors.groupId}</HelperText>
-          </>
-        ) : (
-          <View style={styles.errorContainer}><Text style={styles.errorText}>Could not load Groups.</Text></View>   
-        )}
-        
-        <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.button}>Register</Button>
-        <Button mode="text" onPress={() => navigation.navigate('Login')} style={styles.secondaryButton}>Already have an account? Login</Button>
+          <TextInput label="Name" value={formData.name} onChangeText={(text) => handleChange('name', text)} mode="outlined" error={!!errors.name}/>
+          <HelperText type="error" visible={!!errors.name}>{errors.name}</HelperText>
+
+          <TextInput label="Surname" value={formData.surname} onChangeText={(text) => handleChange('surname', text)} mode="outlined" error={!!errors.surname}/>
+          <HelperText type="error" visible={!!errors.surname}>{errors.surname}</HelperText>
+
+          <TextInput label="Email" value={formData.email} onChangeText={(text) => handleChange('email', text)} mode="outlined" keyboardType="email-address" autoCapitalize="none" error={!!errors.email}/>
+          <HelperText type="error" visible={!!errors.email}>{errors.email}</HelperText>
+
+          <TextInput
+            label="Password"
+            value={formData.password}
+            onChangeText={(text) => handleChange('password', text)}
+            mode="outlined"
+            secureTextEntry={true}
+            textContentType="none" 
+            error={!!errors.password}
+          />
+          <HelperText type="error" visible={!!errors.password}>{errors.password}</HelperText>
+
+          <TextInput
+            label="Confirm Password"
+            value={formData.confirmPassword}
+            onChangeText={(text) => handleChange('confirmPassword', text)}
+            mode="outlined"
+            secureTextEntry={true}
+            textContentType="none" 
+            error={!!errors.confirmPassword}
+          />
+          <HelperText type="error" visible={!!errors.confirmPassword}>{errors.confirmPassword}</HelperText>
+
+          {groupsLoading ? (
+            <ActivityIndicator animating={true} style={{ marginVertical: 20 }} />
+          ) : groups.length > 0 ? (
+            <>
+              <Dropdown
+                  label={"Select your Group"}
+                  mode={"outlined"}
+                  visible={showDropDown}
+                  showDropDown={() => setShowDropDown(true)}
+                  onDismiss={() => setShowDropDown(false)}
+                  value={groupId}
+                  setValue={setGroupId}
+                  list={groups}
+                  inputProps={{ error: !!errors.groupId }}
+              />
+              <HelperText type="error" visible={!!errors.groupId}>{errors.groupId}</HelperText>
+            </>
+          ) : (
+            <View style={styles.errorContainer}><Text style={styles.errorText}>Could not load Groups.</Text></View>   
+          )}
+          
+          <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.button}>Register</Button>
+          <Button mode="text" onPress={() => navigation.navigate('Login')} style={styles.secondaryButton}>Already have an account? Login</Button>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center' },
-  innerContainer: { padding: 20, justifyContent: 'center', paddingBottom:200, },
-  title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
-  button: { marginTop: 20, paddingVertical: 5 },
-  secondaryButton: { marginTop: 15 },
-  errorContainer:{padding: 15, marginVertical: 10, backgroundColor: '#FFEBEE', borderRadius: 4 },
-  errorText: { color: '#B71C1C', textAlign: 'center'},
-  dropdownInput: { backgroundColor: 'transparent' },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center', // This will center the content block vertically if it's shorter than the screen
+  },
+  content: {
+    padding: 20, // All content has consistent padding
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  button: {
+    marginTop: 20,
+    paddingVertical: 5,
+  },
+  secondaryButton: {
+    marginTop: 15,
+  },
+  errorContainer:{
+    padding: 15,
+    marginVertical: 10,
+    backgroundColor: '#FFEBEE',
+    borderRadius: 4,
+  },
+  errorText: {
+    color: '#B71C1C',
+    textAlign: 'center'
+  },
+  dropdownInput: {
+    backgroundColor: 'transparent',
+  },
 });
 
 export default RegisterScreen;

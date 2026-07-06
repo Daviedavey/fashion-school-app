@@ -71,17 +71,14 @@ export const constisTeacher = (token) => {
 
 export const logout = async () => {
   try {
-    // We need to remove all the keys we set during login
+    // Removes all the keys set during login
     const keys = ['userToken', 'userRole', 'username', 'name'];
     await AsyncStorage.multiRemove(keys);
     
-    // Optional: clear the axios default header it is set,
-    // though it will be overwritten on the next login anyway.
      delete axios.defaults.headers.common['Authorization'];
 
     console.log('User data cleared from storage.');
   } catch (error) {
     console.error('Error clearing user data on logout:', error);
-    // Even if there's an error, we should proceed with the logout UI change.
   }
 };

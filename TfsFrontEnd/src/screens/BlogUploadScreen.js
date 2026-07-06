@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView, Alert, Platform, ActivityIndicator } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { createPost } from '../api/blog'; // Import our new API function
+import { createPost } from '../api/blog'; 
 
 const BlogUploadScreen = ({ navigation }) => {
   const [text, setText] = useState('');
