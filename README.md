@@ -2,7 +2,7 @@
 
 A full-stack, cross-platform mobile application for iOS & Android designed to enhance the learning experience for students and teachers at a creative school. This repository contains both the React Native frontend and the Spring Boot backend.
 
-<img width="400" height="870" alt="Live Demo" src="https://github.com/user-attachments/assets/bdb14402-c204-4ed7-a0fc-153e9b79e1fb" />
+<img width="400" height="870" alt="TFS_Gif" src="https://github.com/user-attachments/assets/b1804f7f-d7c9-458e-ac5c-0b4302bfb8d2" />
 
 🏛️ Project Architecture
 
