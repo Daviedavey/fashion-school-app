@@ -30,12 +30,22 @@ dist/
 *.sw?
 
 # React Native
-/ios/Pods/
+**/Pods/
+**/.xcode.env.local
 /ios/build/
 /android/app/build/
 /android/.gradle/
 /android/build/
 /android/app/src/main/assets/index.android.bundle*
+
+ 
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # macOS
 .DS_Store

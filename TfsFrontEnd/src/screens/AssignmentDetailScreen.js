@@ -33,12 +33,12 @@ const AssignmentDetailScreen = ({ route }) => {
           showsHorizontalScrollIndicator={false}
         />
       ) : (
-        <Text style={styles.noImagesText}>No images were attached to this assignment.</Text>
+        <Text style={styles.noImagesText}> No images were attached to this assignment.</Text>
       )}
 
       <View style={styles.header}>
         <Text style={styles.title}>{assignment.title}</Text>
-        //<Text style={styles.meta}> Posted by: {assignment.createdBy}</Text>
+        {/*<Text style={styles.meta}> Posted by: {assignment.createdBy}</Text> */}
       </View>
       
       <View style={styles.descriptionContainer}>
@@ -52,10 +52,10 @@ const AssignmentDetailScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   header: { padding: 20, borderBottomWidth: 1, borderBottomColor: '#eee' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 8 },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 8, alignSelf: 'center'},
   meta: { fontSize: 14, color: '#555' },
-  descriptionContainer: { padding: 20 },
-  description: { fontSize: 16, lineHeight: 24 },
+  descriptionContainer: { padding: 20,  alignItems: 'center' },
+  description: { fontSize: 15, lineHeight: 24, textAlign: 'center' },
   imagesTitle: {
       fontSize: 20,
       fontWeight: 'bold',
