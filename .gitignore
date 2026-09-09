@@ -78,4 +78,10 @@ backend/target/
 # Ignore iOS Pods (they can be regenerated)
 TfsFrontEnd/ios/Pods/
 
+# Android local & native build cache
+**/android/app/.cxx/
+**/android/local.properties
+
+# Backend uploaded media
+backend/uploads/
 

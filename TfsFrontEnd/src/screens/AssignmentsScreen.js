@@ -56,7 +56,7 @@ const AssignmentsScreen = ({ navigation }) => {
       {/* The content below the image */}
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.cardAuthor} numberOfLines={1}> Posted by: {item.createdBy}</Text>
+       {/* <Text style={styles.cardAuthor} numberOfLines={1}> Posted by: {item.createdBy}</Text>  */} 
      
       </View>
 
@@ -90,13 +90,13 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   list: { 
-      paddingHorizontal: 8, // Adjust horizontal padding for the grid
+      paddingHorizontal: 8, // Adjusts horizontal padding for the grid
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 10,
     margin: 7, // Margin around each card
-    width: cardWidth, // Set a fixed width for each card
+    width: cardWidth, // Sets a fixed width for each card
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
       width: '100%',
-      height: 150, // Give the image a fixed height
+      height: 150, // Gives the image a fixed height
   },
   cardImage: {
       width: '100%',

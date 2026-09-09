@@ -1,20 +1,52 @@
-plugins {
-    id "com.android.application"
-    id "org.jetbrains.kotlin.android"
-    id "com.facebook.react"
-}
+//plugins {
 
+    // id "com.android.application"
+   // id "org.jetbrains.kotlin.android"
+    // id "com.facebook.react"
+//}
+apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.facebook.react"
+
+
+react {
+    /* Folders */
+ // The root of your project, i.e. where "package.json" lives. Default is '../..'
+    // root = file("../../")
+    //   The folder where the react-native NPM package is. Default is ../../node_modules/react-native
+    // reactNativeDir = file("../../node_modules/react-native")
+    //   The folder where the react-native Codegen package is. Default is ../../node_modules/@react-native/codegen
+    // codegenDir = file("../../node_modules/@react-native/codegen")
+    //   The cli.js file which is the React Native CLI entrypoint. Default is ../../node_modules/react-native/cli.js
+    // cliFile = file("../../node_modules/react-native/cli.js")
+
+        /* Variants */
+    //   The list of variants to that are debuggable. For those we're going to	    
+        //
+        // //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
+    // hermesFlags = ["-O", "-output-source-map"]
+
+    /* Autolinking */
+       autolinkLibrariesWithApp()
+    }
+    	    
+   
 
 android {
+
+    ndkVersion rootProject.ext.ndkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
     namespace "com.tfsapp"
-    compileSdk = 33 
+    compileSdk = 35 
 
     defaultConfig {
         applicationId "com.tfsapp"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 24
+        targetSdk = 34
         versionCode 1
         versionName "1.0"
+
     }
 
     signingConfigs {
@@ -50,11 +82,13 @@ android {
 dependencies {
     implementation("com.facebook.react:react-android")
 
-    // Hermes (conditional)
-    if (hermesEnabled.toBoolean()) {
+     // Hermes (conditional)
+    if (hermesEnabled.toBoolean()) 
+    {
         implementation("com.facebook.react:hermes-android")
-    } else {
-        implementation("org.webkit:android-jsc:+")
+    } else 
+    {
+        implementation jscFlavor
     }
 
     // Flipper (debug only)
@@ -65,5 +99,5 @@ dependencies {
    // debugImplementation("com.facebook.flipper:flipper-fresco-plugin:0.182.0")
 }
 
-apply from: file("../../node_modules/react-native/node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
-applyNativeModulesAppBuildGradle(project)
+// apply from: file("../../node_modules/react-native/node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+// applyNativeModulesAppBuildGradle(project)
