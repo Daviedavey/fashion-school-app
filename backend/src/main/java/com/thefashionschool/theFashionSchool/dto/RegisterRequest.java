@@ -31,11 +31,12 @@ public class RegisterRequest {
     @ValidPassword
     private String password;
 
-    @NotNull(message = "You must select your Class-Group")
     private Long groupId;
 
+    private String teacherCode;
 
-    public @NotNull Long getGroupId() {
+
+    public Long getGroupId() {
         return groupId;
     }
 }

@@ -23,19 +23,25 @@ export const verifyToken = (token) => {
 };
 
 
-export const register = async (username, name, surname, email, password, groupId) => {
+export const register = async (username, name, surname, email, password, groupId, teacherCode) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
+    const payload = {
       username,
       name,
       surname,
       email,
       password,
-      groupId,
-    });
+    };
+
+    if (teacherCode) {
+      payload.teacherCode = teacherCode;
+    } else if (groupId) {
+      payload.groupId = groupId;
+    }
+
+    const response = await axios.post(`${API_BASE_URL}/api/auth/register`, payload);
     return response;
   } catch (error) {
-    // Re-throw the original, detailed error for the component to handle.
     console.error('API register call failed:', error.response?.status, error.response?.data);
     throw error;
   }
