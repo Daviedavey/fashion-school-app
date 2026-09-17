@@ -1,12 +1,14 @@
+// src/screens/LoginScreen.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Platform, Image, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Text } from 'react-native';
-import { Button, TextInput, HelperText } from 'react-native-paper';
+import { StyleSheet, View, KeyboardAvoidingView, Platform, Image, TouchableOpacity, ScrollView, ActivityIndicator, Dimensions } from 'react-native';
+import { TextInput, Text, HelperText } from 'react-native-paper';
 import axios from 'axios';
 import { login } from '../api/auth';
 import { jwtDecode } from 'jwt-decode';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { theme } from '../theme/theme';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation, onLoginSuccess }) => {
   const [username, setUsername] = useState('');
@@ -15,14 +17,14 @@ const LoginScreen = ({ navigation, onLoginSuccess }) => {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    if (!username || !password) {
+    if (!username.trim() || !password) {
       setError('Please fill in all fields');
       return;
     }
     setLoading(true);
     setError('');
     try {
-      const response = await login(username, password);
+      const response = await login(username.trim(), password);
       if (!response?.data?.token) {
         throw new Error('Invalid response from server');
       }
@@ -30,11 +32,12 @@ const LoginScreen = ({ navigation, onLoginSuccess }) => {
       const isTeacherFlag = userData.role === 'TEACHER';
       axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
       await onLoginSuccess(userData.token, isTeacherFlag);
-      console.log('Login successful', userData);
+      
       await AsyncStorage.setItem('userToken', userData.token);
       await AsyncStorage.setItem('userRole', userData.role);
       await AsyncStorage.setItem('username', userData.username);
       await AsyncStorage.setItem('name', userData.name);
+      
       const decoded = jwtDecode(userData.token);
       console.log('Token expires at:', new Date(decoded.exp * 1000));
     } catch (err) {
@@ -45,75 +48,92 @@ const LoginScreen = ({ navigation, onLoginSuccess }) => {
     }
   };
 
-   return (
+  return (
     <View style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.keyboardAvoidingView}
       >
-        {/* Main content area that expands to fill space */}
-        <View style={styles.mainContent}>
-          <Image
-            source={require('../assets/images/logo.jpg')}
-            style={styles.logo}
-          />
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+        >
+          {/* 1. TOP LOGO */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/images/logo.jpg')}
+              style={styles.logo}
+            />
+          </View>
+
+          {/* 2. EDGE-TO-EDGE FULL-BLEED ARTWORK */}
           <Image
             source={require('../assets/images/login-illustration.jpg')}
             style={styles.illustration}
           />
-        </View>
 
-        {/* Form area that is pushed down by the main content */}
-        <View style={styles.formContainer}>
-          <TextInput
-            label="Username"
-            value={username}
-            onChangeText={setUsername}
-            style={styles.input}
-            underlineColor="transparent"
-            activeUnderlineColor={theme.colors.primary}
-            theme={{ colors: { background: 'transparent' } }}
-            autoCapitalize="none"
-          />
-          <TextInput
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.input}
-            underlineColor="transparent"
-            activeUnderlineColor={theme.colors.primary}
-            theme={{ colors: { background: 'transparent' } }}
-          />
+          {/* 3. FORM & BUTTONS (PADDED) */}
+          <View style={styles.formContainer}>
+            <TextInput
+              label="Username"
+              value={username}
+              onChangeText={setUsername}
+              style={styles.input}
+              underlineColor="transparent"
+              activeUnderlineColor={theme.colors.primary}
+              theme={{ colors: { background: 'transparent' } }}
+              autoCapitalize="none"
+            />
+            <TextInput
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+              underlineColor="transparent"
+              activeUnderlineColor={theme.colors.primary}
+              theme={{ colors: { background: 'transparent' } }}
+            />
 
-          {error ? (
-            <HelperText type="error" visible={!!error} style={styles.errorText}>
-              {error}
-            </HelperText>
-          ) : null}
+            {error ? (
+              <HelperText type="error" visible={!!error} style={styles.errorText}>
+                {error}
+              </HelperText>
+            ) : null}
 
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={handleLogin}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color={theme.colors.primary} />
-            ) : (
-              <Image source={require('../assets/images/arrow.jpg')} style={styles.loginButtonImage} />
-            )}
-          </TouchableOpacity>
-        </View>
+            {/* Custom Hanger-Arrow Button */}
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={handleLogin}
+              disabled={loading}
+              activeOpacity={0.7}
+            >
+              {loading ? (
+                <ActivityIndicator color={theme.colors.primary} size="small" />
+              ) : (
+                <Image
+                  source={require('../assets/images/arrow.jpg')}
+                  style={styles.arrowImage}
+                />
+              )}
+            </TouchableOpacity>
 
-        {/* Footer area at the very bottom */}
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.footerText}>Don't have an account? Register</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-            <Text style={styles.footerText}>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
+            {/* Footer Links */}
+            <View style={styles.footer}>
+              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.footerText}>
+                  Don't have an account? <Text style={{ fontWeight: 'bold' }}>Register</Text>
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                <Text style={styles.footerSubText}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
@@ -126,53 +146,70 @@ const styles = StyleSheet.create({
   },
   keyboardAvoidingView: {
     flex: 1,
-    justifyContent: 'space-between', // Distributes children vertically
   },
-  mainContent: {
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 0,
+    backgroundColor: '#fff',
+  },
+  // 1. ELEGANT TOP SPACING (Clears Dynamic Island / Notch cleanly)
+  logoContainer: {
     alignItems: 'center',
-    paddingTop: 50, // Space from the top
+    paddingTop: Platform.OS === 'ios' ? 62 : 32, // More breathing room from the top
+    paddingBottom: 14,
+    backgroundColor: '#fff',
   },
   logo: {
-    width: 250,
-    height: 80,
+    width: 240,
+    height: 48,
     resizeMode: 'contain',
   },
+  // 2. BALANCED FULL-BLEED ARTWORK
   illustration: {
-    width: '100%',
-    height: 480, // fixed height for the main image
-    resizeMode: 'contain',
+    width: SCREEN_WIDTH,
+    height: SCREEN_WIDTH * 1.05, // Slightly refined height for perfect screen balance
+    resizeMode: 'cover',
   },
+  // 3. TIGHT, COHESIVE FORM SPACING
   formContainer: {
-    width: '85%',
-    alignSelf: 'center',
+    paddingHorizontal: 28,
+    paddingTop: 18,
+    paddingBottom: 24,
+    backgroundColor: '#fff',
   },
   input: {
     backgroundColor: 'transparent',
+    marginVertical: 6, // Clean, even spacing between username and password
   },
   errorText: {
     textAlign: 'center',
-    marginBottom: 10,
+    marginVertical: 4,
   },
   loginButton: {
-    alignSelf: 'flex-end',
-    marginTop: 10,
-    padding: 10,
+    alignSelf: 'center',
+    marginTop: 22,
+    marginBottom: 8, 
+    paddingVertical: 8,
+    paddingHorizontal: 16,
   },
-    loginButtonImage: {
-     width: 180,  
-     height: 35, 
-     resizeMode: 'contain', // Ensures the image scales nicely
-     position: 'absolute',
-     right: 90
+  arrowImage: {
+    width: 90,
+    height: 36,
+    resizeMode: 'contain',
   },
   footer: {
-    paddingBottom: 40,
+    marginTop: 16,
     alignItems: 'center',
   },
   footerText: {
     color: theme.colors.primary,
     fontSize: 14,
-    marginVertical: 5,
+    marginVertical: 4,
+  },
+  footerSubText: {
+    color: '#888',
+    fontSize: 13,
+    marginTop: 4,
   },
 });
 
