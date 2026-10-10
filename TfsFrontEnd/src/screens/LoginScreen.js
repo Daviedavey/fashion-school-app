@@ -63,7 +63,7 @@ const LoginScreen = ({ navigation, onLoginSuccess }) => {
           {/* 1. TOP LOGO */}
           <View style={styles.logoContainer}>
             <Image
-              source={require('../assets/images/logo.jpg')}
+              source={require('../assets/images/Forme-logo.jpg')}
               style={styles.logo}
             />
           </View>
