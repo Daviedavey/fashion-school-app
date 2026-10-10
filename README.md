@@ -1,10 +1,10 @@
- The Fashion School App 📱✨
+ The Fashion School App 📱
 
 A full-stack, cross-platform mobile application for iOS & Android designed to enhance the learning experience for students and teachers at a creative school. This repository contains both the React Native frontend and the Spring Boot backend.
 
 <img width="400" height="870" alt="TFS_Gif" src="https://github.com/user-attachments/assets/b1804f7f-d7c9-458e-ac5c-0b4302bfb8d2" />
 
-🏛️ Project Architecture
+ Project Architecture
 
 This project is a full-stack application built with a modern, industry-standard stack, structured as a mono-repo.
 
@@ -13,7 +13,7 @@ This project is a full-stack application built with a modern, industry-standard 
 
 The application follows a classic client-server model with stateless JWT-based authentication.
 
- ✨ Key Features
+  Key Features
 
 -   ✅ Role-Based Authentication: Secure user registration and login flow with distinct "Teacher" and "Student" roles, managed by JWTs.
 -   ✅ Dynamic Blog System: Teachers can create and delete posts with text and images. All users can view the feed, which features "Read More" text expansion and a full-screen image viewer.
@@ -21,7 +21,7 @@ The application follows a classic client-server model with stateless JWT-based a
 -   ✅ Personalized Student Experience: The app intelligently filters content, ensuring students only see assignments that match their specific group's designated skill levels.
 -   ✅ Customizable Dashboard: Teachers can update a "Fashion Icon of the Week" feature, providing dynamic and engaging content for the student home screen.
 
-🛠️ Tech Stack
+ Tech Stack
 
  Frontend (`/TfsFrontEnd`)
 ![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -83,7 +83,7 @@ Run the Application:
 
 ---
 
- 🧠 Development & Problem-Solving
+  Development & Problem-Solving
 
 A significant part of this project involved navigating and resolving complex environment and dependency issues inherent in the React Native ecosystem. Key challenges included:
 
