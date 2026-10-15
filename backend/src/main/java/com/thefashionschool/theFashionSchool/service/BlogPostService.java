@@ -35,32 +35,22 @@ public class BlogPostService {
     @Autowired
     private BlogPostRepository blogPostRepository;
 
+    @Autowired
+    private S3Service s3Service; // Injects s3 Service
+
     public BlogPost createPost(String username, String text, MultipartFile image) {
-        Path filePath = null; // Declare here to use in logging
-        try {
-            // Create upload directory if not exists
-            Files.createDirectories(Paths.get(uploadDir));
 
-            // Generate unique filename
-            String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
-            filePath = Paths.get(uploadDir, filename);
-
-            logger.info("Attempting to save file to absolute path: {}", filePath.toAbsolutePath());
-
-            // Save file
-            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        // upload image straight to AWS S3
+          String s3Url = s3Service.uploadFile(image);
 
             // Create and save blog post
             BlogPost post = new BlogPost();
             post.setUsername(username);
             post.setText(text);
-            post.setImagePath(filename);
+            post.setImagePath(s3Url);
             post.setCreatedAt(LocalDateTime.now());
 
             return blogPostRepository.save(post);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store file", e);
-        }
     }
 
     public void deletePost(Long postId, String currentUsername) {
@@ -73,21 +63,12 @@ public class BlogPostService {
             throw new AccessDeniedException("You are not authorized to delete this post.");
         }
 
-        // 3. Get the path to the image file before we delete the database record.
-        String filename = post.getImagePath();
-        Path imagePath = Paths.get(uploadDir).resolve(filename);
-
         // 4. Delete the post from the database.
         blogPostRepository.deleteById(postId);
         logger.info("Successfully deleted blog post record with ID: {}", postId);
 
-        // 5. Delete the associated image file from the file system.
-        try {
-            Files.deleteIfExists(imagePath);
-            logger.info("Successfully deleted associated image file: {}", filename);
-        } catch (IOException e) {
-            logger.warn("Could not delete image file: {}. Manual cleanup may be required. Error: {}", filename, e.getMessage());
-        }
+        //Delete image from AWS S3
+       s3Service.deleteFile(post.getImagePath());
     }
 
     public List<BlogPostDTO> getAllPosts() {
@@ -101,7 +82,7 @@ public class BlogPostService {
                 post.getId(),
                 post.getUsername(),
                 post.getText(),
-                post.getImagePath(), // Return accessible URL
+                post.getImagePath(), // contains the cloud URL
                 post.getCreatedAt()
         );
     }

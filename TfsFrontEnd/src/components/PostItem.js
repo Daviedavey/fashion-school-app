@@ -15,7 +15,7 @@ const PostItem = ({ item, onImagePress }) => {
     setIsExpanded(!isExpanded);
   };
 
-  const imageUrl = `${API_BASE_URL}/api/images/${item.imagePath}`;
+  const imageUrl = item.imagePath.startsWith('http') ? item.imagePath : `${API_BASE_URL}/api/images/${item.imagePath}`;
   const postDate = new Date(item.createdAt).toLocaleDateString('en-US', { 
       year: 'numeric', month: 'long', day: 'numeric' 
   });

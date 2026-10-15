@@ -78,7 +78,7 @@ const UpdateBlogScreen = () => {
 
 
   const renderItem = ({ item }) => {
-    const imageUrl = `${API_BASE_URL}/api/images/${item.imagePath}`;
+    const imageUrl = item.imagePath.startsWith('http') ? item.imagePath : `${API_BASE_URL}/api/images/${item.imagePath}`;
     
     // Check if the current user is the author of the post
     const isAuthor = currentUsername === item.username;
