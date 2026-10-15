@@ -17,31 +17,27 @@ import java.util.UUID;
 @Service
 public class FashionIconService {
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
 
     @Autowired
     private FashionIconRepository fashionIconRepository;
+
+    @Autowired
+    private S3Service s3Service;
+
 
     public Optional<FashionIcon> getCurrentFashionIcon() {
         return fashionIconRepository.findTopByOrderByUpdatedAtDesc();
     }
 
     public FashionIcon createOrUpdateFashionIcon(String name, String description, MultipartFile image) throws IOException {
-        // Since there's only one, we can either update the existing one or create a new one.
-        // For simplicity, we'll create a new one each time and rely on the query to get the latest.
+      //upload to S3
+        String s3Url = s3Service.uploadFile(image);
 
-        // File storage logic
-        String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
-        Path uploadPath = Paths.get(uploadDir);
-        Files.createDirectories(uploadPath);
-        Path filePath = uploadPath.resolve(filename);
-        Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         FashionIcon fashionIcon = new FashionIcon();
         fashionIcon.setName(name);
         fashionIcon.setDescription(description);
-        fashionIcon.setImagePath(filename);
+        fashionIcon.setImagePath(s3Url);
         fashionIcon.setUpdatedAt(LocalDateTime.now());
 
         return fashionIconRepository.save(fashionIcon);

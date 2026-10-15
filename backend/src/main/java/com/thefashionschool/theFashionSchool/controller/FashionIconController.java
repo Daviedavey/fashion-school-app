@@ -23,18 +23,11 @@ public class FashionIconController {
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentFashionIcon() {
         return fashionIconService.getCurrentFashionIcon()
-                .map(icon -> {
-                    String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                            .path("/api/images/")
-                            .path(icon.getImagePath())
-                            .toUriString();
-                    // Return a map or a DTO
-                    return ResponseEntity.ok(Map.of(
-                            "name", icon.getName(),
-                            "description", icon.getDescription(),
-                            "imageUrl", imageUrl
-                    ));
-                })
+                .map(icon -> ResponseEntity.ok(Map.of(
+                        "name", icon.getName(),
+                        "description", icon.getDescription(),
+                        "imageUrl", icon.getImagePath() // Direct S3 URL!
+                )))
                 .orElse(ResponseEntity.notFound().build());
     }
 

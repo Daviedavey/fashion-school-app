@@ -35,6 +35,9 @@ public class AssignmentService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private S3Service s3Service;
+
     @Transactional // Use transactions for operations involving multiple saves
     public Assignment createAssignment(String title, String description, String username, Level level, List<MultipartFile> files) {
 
@@ -46,28 +49,17 @@ public class AssignmentService {
 
         // --- File Upload Logic for multiple files ---
         if (files != null && !files.isEmpty()) {
-            Path uploadPath = Paths.get(assignmentUploadDir);
-            try {
-                Files.createDirectories(uploadPath);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not create upload directory!", e);
-            }
-
             for (MultipartFile file : files) {
-                String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                try {
-                    Path filePath = uploadPath.resolve(filename);
-                    Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Upload each image to AWS S3
+                String s3Url = s3Service.uploadFile(file);
 
                     // Create an AssignmentImage entity and link it to the Assignment
                     AssignmentImage assignmentImage = new AssignmentImage();
-                    assignmentImage.setImagePath(filename);
+                    assignmentImage.setImagePath(s3Url);
                     assignment.addImage(assignmentImage); // Use the helper method we created
 
-                } catch (IOException e) {
-                    // It's better to log this and decide if the whole operation should fail
-                    throw new RuntimeException("Failed to store assignment file: " + file.getOriginalFilename(), e);
-                }
+
             }
         }
 
@@ -107,12 +99,12 @@ public class AssignmentService {
     }
 
     public AssignmentDTO convertToDto(Assignment assignment) {
-        // Will create this endpoint in the controller. It's the same as the blog images endpoint.
-        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/images/").toUriString();
 
+        // Direct cloud URLs from S3
         List<String> imageUrls = assignment.getImages().stream()
-                .map(image -> baseUrl + image.getImagePath())
+                .map(AssignmentImage::getImagePath)
                 .collect(Collectors.toList());
+
 
         return new AssignmentDTO(
                 assignment.getId(),
