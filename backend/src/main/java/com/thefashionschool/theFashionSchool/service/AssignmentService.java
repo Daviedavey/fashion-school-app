@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,6 +67,28 @@ public class AssignmentService {
 
         return assignmentRepository.save(assignment);
     }
+
+    public void deleteAssignment(Long assignmentId, String currentUsername) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Assignment not found with ID: " + assignmentId));
+
+        // Security Check: Only the teacher who created it can delete it
+        if (!assignment.getCreatedBy().equals(currentUsername)) {
+            throw new AccessDeniedException("You are not authorized to delete this assignment.");
+        }
+
+        // 1. Deletes all associated images from AWS S3 to save storage costs!
+        if (assignment.getImages() != null) {
+            for (AssignmentImage image : assignment.getImages()) {
+                s3Service.deleteFile(image.getImagePath());
+            }
+        }
+
+        // 2. Deletes the assignment from the PostgreSQL database
+        // (Because we used CascadeType.ALL, this automatically deletes the rows in assignment_images too)
+        assignmentRepository.deleteById(assignmentId);
+    }
+
 
     public List<AssignmentDTO> getAllAssignmentsForTeacher() {
         return assignmentRepository.findAllByOrderByCreatedAtDesc()

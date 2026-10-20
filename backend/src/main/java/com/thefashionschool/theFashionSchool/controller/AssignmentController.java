@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+ import jakarta.persistence.EntityNotFoundException;
+ import org.springframework.security.access.AccessDeniedException;
+
 
 
 import java.util.List;
@@ -56,6 +59,23 @@ public class AssignmentController {
     @GetMapping
     public ResponseEntity<List<AssignmentDTO>> getAllAssignments() {
         return ResponseEntity.ok(assignmentService.getAssignmentsForCurrentUser());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAssignment(@PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName();
+        try {
+            assignmentService.deleteAssignment(id, username);
+            return ResponseEntity.ok(Map.of("message", "Assignment deleted successfully."));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", e.getMessage()));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Error deleting assignment", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Failed to delete assignment: " + e.getMessage()));
+        }
     }
 
 

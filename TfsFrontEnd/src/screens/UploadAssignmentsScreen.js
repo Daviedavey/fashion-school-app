@@ -71,7 +71,7 @@ const UploadAssignmentsScreen = ({ navigation }) => {
       <TextInput label="Assignment Title" value={title} onChangeText={setTitle} mode="outlined" style={styles.input} />
       <TextInput label="Description" value={description} onChangeText={setDescription} mode="outlined" multiline numberOfLines={4} style={styles.input} />
 
-      {/*  REPLACED the old component with SegmentedButtons */}
+      {/*  Replaced the old component with SegmentedButtons */}
       <Text style={styles.label}>Difficulty Level</Text>
       <SegmentedButtons
         value={level}
@@ -84,7 +84,7 @@ const UploadAssignmentsScreen = ({ navigation }) => {
         ]}
       />
       
-      {/* Image Picker and Preview section is unchanged */}
+      {/* Image Picker and Preview section */}
        <View style={styles.imageSection}>
           <Button icon="images" mode="outlined" onPress={handleChoosePhotos} style={styles.input}>
             Add Images
@@ -110,6 +110,9 @@ const UploadAssignmentsScreen = ({ navigation }) => {
           Create Assignment
         </Button>
       )}
+      <Button mode="outlined" icon="format-list-bulleted" onPress={() => navigation.navigate('ManageAssignments')} style={styles.manageButton}>
+        Manage Existing Assignments
+      </Button>
     </ScrollView>
   );
 };
@@ -148,6 +151,9 @@ const styles = StyleSheet.create({
       borderRadius: 12,
   },
   submitButton: { marginTop: 10, paddingVertical: 8 },
+  
+  manageButton: { marginTop: 15, marginBottom: 30, paddingVertical: 5,
+  },
 });
 
 export default UploadAssignmentsScreen;

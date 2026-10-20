@@ -1,9 +1,8 @@
 import { Platform } from 'react-native';
 
 // Define the base URLs for each platform
-const IOS_BASE_URL = 'http://localhost:8080';
-const ANDROID_BASE_URL = 'http://10.0.2.2:8080';
-
+const IOS_BASE_URL = 'http://54.93.251.26:8080';
+const ANDROID_BASE_URL = 'http://54.93.251.26:8080';
 // React Native's Platform module to select the correct URL
 export const API_BASE_URL = Platform.OS === 'ios' ? IOS_BASE_URL : ANDROID_BASE_URL;
 

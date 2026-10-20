@@ -6,6 +6,7 @@ import ViewPortfolioScreen from '../screens/ViewPortfolioScreen';
 import UpdateBlogScreen from '../screens/UpdateBlogScreen';
 import UpdateFashionIconScreen from '../screens/UpdateFashionIconScreen';
 import { Button } from 'react-native-paper'; 
+import ManageAssignmentsScreen from '../screens/ManageAssignmentsScreen';
 
 
 const Stack = createStackNavigator();
@@ -24,6 +25,8 @@ export default function TeacherStack({ onLogout }) {
       <Stack.Screen name="ViewPortfolio" component={ViewPortfolioScreen} />
       <Stack.Screen name="CreatedBlogs" component={UpdateBlogScreen} />
       <Stack.Screen name="UpdateFashionIcon" component={UpdateFashionIconScreen} options={{title: 'Update Fashiomn Icon' }} />
+      <Stack.Screen name="ManageAssignments" component={ManageAssignmentsScreen} options={{ title: 'Manage Assignments' }} 
+      />
     </Stack.Navigator>
   );
 }

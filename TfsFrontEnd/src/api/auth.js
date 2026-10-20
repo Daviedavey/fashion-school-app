@@ -50,6 +50,10 @@ export const register = async (username, name, surname, email, password, groupId
 // api/auth.js
 export const login = async (username, password) => {
   try {
+    
+    console.log("--- ATTEMPTING LOGIN ---");
+    console.log(`URL: ${API_BASE_URL}/api/auth/login`)
+    
     const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
       username,
       password

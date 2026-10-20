@@ -54,3 +54,14 @@ export const getAssignments = async () => {
     throw error;
   }
 };
+
+export const deleteAssignment = async (assignmentId) => {
+  try {
+    const api = await getAuthenticatedApi();
+    const response = await api.delete(`/api/assignments/${assignmentId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting assignment:', error.response?.data || error.message);
+    throw error;
+  }
+};

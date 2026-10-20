@@ -74,6 +74,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/blog/**").authenticated()
                         // ONLY teachers can create Assignments
                         .requestMatchers(HttpMethod.POST, "/api/assignments").hasAuthority("ROLE_TEACHER")
+                        // ONLY teachers can delete Assignments
+                        .requestMatchers(HttpMethod.DELETE, "/api/assignments/**").hasAuthority("ROLE_TEACHER")
                         // any logged-in user can view Assignments
                         // This includes both getting the list and downloading files
                         .requestMatchers(HttpMethod.GET, "/api/assignments", "/api/assignments/**").authenticated()

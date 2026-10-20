@@ -1,4 +1,3 @@
-// src/screens/UpdateBlogScreen.js
 
 import React, { useState, useEffect, useCallback } from 'react';
 // ### ADD THESE IMPORTS ###
