@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// src/main/java/com/yourapp/controller/TeacherController.java
 @RestController
 @RequestMapping("/api/teacher")
 public class TeacherController {
